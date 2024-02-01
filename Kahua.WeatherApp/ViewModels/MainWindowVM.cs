@@ -6,6 +6,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Kahua.WeatherApp.Services;
 using ApplicationException = System.ApplicationException;
+using Microsoft.UI.Xaml;
 
 namespace Kahua.WeatherApp.ViewModels;
 
@@ -22,18 +23,26 @@ public class MainWindowVM : ObservableObject
     private string _temperature;
     private string _visibility;
     private string _windSpeed;
+    private ElementTheme _theme;
+    private bool _isLight;
 
     public MainWindowVM(IWeatherService weatherService, IGeolocationService geolocationService)
     {
         _weatherService = weatherService;
         _geolocationService = geolocationService;
+        
         GetCurrentLocationCommand = new AsyncRelayCommand(GetCurrentLocationAsync, () => !InProgress);
         SearchWeatherCommand = new AsyncRelayCommand(SearchWeatherAsync, () => !InProgress);
         IsCelsius = true;
+        IsLight = true;
+        Theme = ElementTheme.Light;
         PropertyChanged += async (sender, args) =>
         {
             if (args.PropertyName == nameof(IsCelsius)) await SearchWeatherAsync();
+            if (args.PropertyName == nameof(IsLight)) Theme = IsLight ? ElementTheme.Light : ElementTheme.Dark;
+            
         };
+     
     }
 
     public bool InProgress
@@ -132,6 +141,28 @@ public class MainWindowVM : ObservableObject
             if (value == _isCelsius) return;
             _isCelsius = value;
             IsCelsius = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public ElementTheme Theme
+    {
+        get => _theme;
+        set
+        {
+            if (value == _theme) return;
+            _theme = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public bool IsLight
+    {
+        get => _isLight;
+        set
+        {
+            if (value == _isLight) return;
+            _isLight = value;
             OnPropertyChanged();
         }
     }

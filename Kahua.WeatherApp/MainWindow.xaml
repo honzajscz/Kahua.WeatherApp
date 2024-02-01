@@ -14,8 +14,7 @@
     mc:Ignorable="d"
     d:DataContext="{d:DesignInstance Type=viewModels:MainWindowVM, IsDesignTimeCreatable=False}">
 
-
-    <Grid RequestedTheme="Light" x:Name="RootGrid">
+    <Grid RequestedTheme="{Binding Theme}" x:Name="RootGrid">
         <Grid.Resources>
             <Thickness x:Key="MainMargin">20,10,20,10</Thickness>
             <converters:DebugConverter x:Key="DebugConverter" />
@@ -31,9 +30,9 @@
             <RowDefinition Height="4*" />
         </Grid.RowDefinitions>
 
-        <Border Grid.Row="0" Grid.Column="0" Background="LightBlue" />
-        <Border Grid.Row="0" Grid.Column="1" Background="LightSkyBlue" />
-        <Border Grid.Row="1" Grid.ColumnSpan="2" Grid.Column="0" Background="DeepSkyBlue" />
+        <Border Grid.Row="0" Grid.Column="0" Background="{ThemeResource LighterBrush}" />
+        <Border Grid.Row="0" Grid.Column="1" Background="{ThemeResource LightBrush}" />
+        <Border Grid.Row="1" Grid.ColumnSpan="2" Grid.Column="0" Background="{ThemeResource DarkererBrush}" />
 
         <StackPanel Grid.Row="0" Grid.Column="0" VerticalAlignment="Center">
             <StackPanel.Resources>
@@ -74,9 +73,9 @@
                         <Setter Property="MinWidth" Value="0" />
                     </Style>
                 </StackPanel.Resources>
-                <ToggleSwitch OffContent="Dark" OnContent="Light" IsOn="True"
+                <ToggleSwitch OffContent="Dark" OnContent="Light" IsOn="{Binding IsLight, Mode=TwoWay}"
                               Style="{StaticResource ToggleSwitchStyle}" />
-                <ToggleSwitch OffContent="°F" OnContent="°C" IsOn="{Binding IsCelsius, Mode=TwoWay }"
+                <ToggleSwitch OffContent="°F" OnContent="°C" IsOn="{Binding IsCelsius, Mode=TwoWay}"
                               Style="{StaticResource ToggleSwitchStyle}" />
             </StackPanel>
             <controls:InfoDisplay Label="Place:" VerticalAlignment="Stretch" Text="{Binding Place}" />
