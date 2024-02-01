@@ -5,7 +5,7 @@ using OpenWeather;
 
 namespace Kahua.WeatherApp.Services;
 
-class GeolocationService : IGeolocationService
+internal class GeolocationService : IGeolocationService
 {
     public async Task<Location> GetCurrentLocationAsync()
     {
@@ -15,7 +15,7 @@ class GeolocationService : IGeolocationService
             case GeolocationAccessStatus.Allowed:
                 var geolocator = new Geolocator { DesiredAccuracyInMeters = 50 };
                 var position = await geolocator.GetGeopositionAsync();
-                return new (position.Coordinate.Latitude, position.Coordinate.Longitude) ;
+                return new Location(position.Coordinate.Latitude, position.Coordinate.Longitude);
             case GeolocationAccessStatus.Denied:
                 throw new ApplicationException("Location access denied.");
             case GeolocationAccessStatus.Unspecified:

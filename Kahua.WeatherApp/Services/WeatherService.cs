@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Kahua.WeatherApp.ViewModels;
 using OpenWeather;
 using UnitsNet.Units;
 
 namespace Kahua.WeatherApp.Services;
 
-class WeatherService : IWeatherService
+internal class WeatherService : IWeatherService
 {
     public const int TimeOutSec = 10;
 
@@ -15,9 +14,7 @@ class WeatherService : IWeatherService
         try
         {
             if (!StationDictionary.TryGetClosestStation(latitude, longitude, out var stationInfo))
-            {
                 throw new ApplicationException("Weather station not found");
-            }
 
             var weather = await stationInfo.AsMetarStation().Update().WaitAsync(TimeSpan.FromSeconds(TimeOutSec));
             if (weather == null)
@@ -27,7 +24,7 @@ class WeatherService : IWeatherService
             var weatherInUnits = weather.Value.ConvertTo(new Units(units == WeatherUnits.Celsius
                     ? TemperatureUnit.DegreeCelsius
                     : TemperatureUnit.DegreeFahrenheit,
-                PressureUnit.Hectopascal, SpeedUnit.Knot, LengthUnit.Kilometer));
+                PressureUnit.Hectopascal));
 
             var region = string.IsNullOrWhiteSpace(stationInfo.Region) ? string.Empty : $" ({stationInfo.Region})";
             var location = new WeatherStationLocation(stationInfo.Country, stationInfo.Name + region);

@@ -1,36 +1,33 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using System.Windows.Input;
-using Windows.Devices.Geolocation;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Kahua.WeatherApp.Services;
-using ApplicationException = System.ApplicationException;
 using Microsoft.UI.Xaml;
 
 namespace Kahua.WeatherApp.ViewModels;
 
 public class MainWindowVM : ObservableObject
 {
-    private readonly IWeatherService _weatherService;
     private readonly IGeolocationService _geolocationService;
+    private readonly IWeatherService _weatherService;
     private string _dewPoint;
     private bool _inProgress;
     private bool _isCelsius;
+    private bool _isLight;
     private double _latitude;
     private double _longitude;
     private string _place;
     private string _temperature;
+    private ElementTheme _theme;
     private string _visibility;
     private string _windSpeed;
-    private ElementTheme _theme;
-    private bool _isLight;
 
     public MainWindowVM(IWeatherService weatherService, IGeolocationService geolocationService)
     {
         _weatherService = weatherService;
         _geolocationService = geolocationService;
-        
+
         GetCurrentLocationCommand = new AsyncRelayCommand(GetCurrentLocationAsync, () => !InProgress);
         SearchWeatherCommand = new AsyncRelayCommand(SearchWeatherAsync, () => !InProgress);
         IsCelsius = true;
@@ -40,9 +37,7 @@ public class MainWindowVM : ObservableObject
         {
             if (args.PropertyName == nameof(IsCelsius)) await SearchWeatherAsync();
             if (args.PropertyName == nameof(IsLight)) Theme = IsLight ? ElementTheme.Light : ElementTheme.Dark;
-            
         };
-     
     }
 
     public bool InProgress
