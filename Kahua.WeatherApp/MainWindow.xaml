@@ -7,13 +7,13 @@
     xmlns:local="using:Kahua.WeatherApp"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-
+    xmlns:controls="using:Kahua.WeatherApp.Controls"
+    Title="Kahua Weather App"
     mc:Ignorable="d">
 
     <Grid RequestedTheme="Light" x:Name="Grid">
         <Grid.Resources>
-
-            <Thickness x:Key="LocationMargin">20,10,20,10</Thickness>
+            <Thickness x:Key="MainMargin">20,10,20,10</Thickness>
         </Grid.Resources>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="5*" />
@@ -27,63 +27,55 @@
         <Border Grid.Row="0" Grid.Column="0" Background="LightBlue" />
         <Border Grid.Row="0" Grid.Column="1" Background="LightSkyBlue" />
         <Border Grid.Row="1" Grid.ColumnSpan="2" Grid.Column="0" Background="DeepSkyBlue" />
-        <StackPanel VerticalAlignment="Center">
+
+        <StackPanel Grid.Row="0" Grid.Column="0" VerticalAlignment="Center">
             <StackPanel.Resources>
-                <Style x:Key="LabeledTextBoxStyle" TargetType="local:LabeledTextBox">
-                    <Setter Property="Margin" Value="{StaticResource LocationMargin}" />
+                <Style x:Key="LabeledTextBoxStyle" TargetType="controls:LabeledTextBox">
+                    <Setter Property="Margin" Value="{StaticResource MainMargin}" />
                     <Setter Property="HorizontalAlignment" Value="Stretch" />
                 </Style>
-                <Style x:Key="ButtonStyle" TargetType="Button">
-                    <Setter Property="HorizontalAlignment" Value="Right" />
-                    <Setter Property="Background" Value="Transparent" />
-                    <Setter Property="BorderThickness" Value="0" />
-                </Style>
+              
             </StackPanel.Resources>
-            <local:LabeledTextBox Label="Long:" Style="{StaticResource LabeledTextBoxStyle}" />
-            <local:LabeledTextBox Label="Lat: " Style="{StaticResource LabeledTextBoxStyle}" />
+            <controls:LabeledTextBox Label="Long:" Style="{StaticResource LabeledTextBoxStyle}" />
+            <controls:LabeledTextBox Label="Lat: " Style="{StaticResource LabeledTextBoxStyle}" />
 
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-
-                <Button Style="{StaticResource ButtonStyle}" Click="ButtonBase_OnClick">
-                    <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE707;" />
-                    <ToolTipService.ToolTip>
-                        <ToolTip Content="Use current location" />
-                    </ToolTipService.ToolTip>
-                </Button>
-                <Button Style="{StaticResource ButtonStyle}" Click="ButtonBase_OnClick">
-                    <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE721;" />
-                </Button>
+                <controls:GlyphButton Glyph="&#xE707;" ToolTip="Use current location"/>
+                <controls:GlyphButton Glyph="&#xE721;" ToolTip="Get weather"/>
             </StackPanel>
             <ProgressBar HorizontalAlignment="Stretch" IsIndeterminate="True" Visibility="Visible" Opacity="1" />
         </StackPanel>
 
-        <StackPanel Grid.Row="0" Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Stretch" Margin="{StaticResource LocationMargin}">
+        <StackPanel Grid.Row="0" Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Stretch"
+                    Margin="{StaticResource MainMargin}">
             <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Right">
                 <StackPanel.Resources>
-                    <Style x:Key="ToggleSwitchStyle" TargetType="ToggleSwitch"   BasedOn="{StaticResource DefaultToggleSwitchStyle}">
+                    <Style x:Key="ToggleSwitchStyle" TargetType="ToggleSwitch"
+                           BasedOn="{StaticResource DefaultToggleSwitchStyle}">
+                        <!-- work-around https://github.com/microsoft/microsoft-ui-xaml/issues/5969-->
                         <Setter Property="HorizontalAlignment" Value="Right" />
                         <Setter Property="Margin" Value="10,0,0,0" />
                         <Setter Property="MinWidth" Value="0" />
                     </Style>
                 </StackPanel.Resources>
                 <ToggleSwitch OffContent="Dark" OnContent="Light" IsOn="True" Style="{StaticResource ToggleSwitchStyle}" />
-                <ToggleSwitch OffContent="F" OnContent="C" IsOn="True" Style="{StaticResource ToggleSwitchStyle}" />
+                <ToggleSwitch OffContent="F°" OnContent="C°" IsOn="True" Style="{StaticResource ToggleSwitchStyle}" />
             </StackPanel>
-            <local:InfoDisplay VerticalAlignment="Stretch" />
+            <controls:InfoDisplay Label="Place:" VerticalAlignment="Stretch" />
         </StackPanel>
+
         <Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
-              Margin="{StaticResource LocationMargin}" HorizontalAlignment="Stretch" VerticalAlignment="Center">
+              Margin="{StaticResource MainMargin}" HorizontalAlignment="Stretch" VerticalAlignment="Center">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="1*" />
                 <ColumnDefinition Width="1*" />
                 <ColumnDefinition Width="1*" />
                 <ColumnDefinition Width="1*" />
             </Grid.ColumnDefinitions>
-            <local:InfoDisplay Grid.Column="0" />
-            <local:InfoDisplay Grid.Column="1" />
-            <local:InfoDisplay Grid.Column="2" />
-            <local:InfoDisplay Grid.Column="3" />
-
+            <controls:InfoDisplay Label="Pressure:" Grid.Column="0" />
+            <controls:InfoDisplay Label="Wind:" Grid.Column="1" />
+            <controls:InfoDisplay Label="Dew Point:"  Grid.Column="2" />
+            <controls:InfoDisplay Label="Temperature:" Grid.Column="3" />
         </Grid>
     </Grid>
 </Window>
