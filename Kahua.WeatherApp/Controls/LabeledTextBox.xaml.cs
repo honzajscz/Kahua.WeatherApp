@@ -39,7 +39,16 @@ namespace Kahua.WeatherApp.Controls
 
         private void TextBox_OnBeforeTextChanging(TextBox sender, TextBoxBeforeTextChangingEventArgs args)
         {
+            if(args.NewText == "-") return;
             args.Cancel = IsNumber && !string.IsNullOrWhiteSpace(args.NewText) && (!double.TryParse(args.NewText, out var number ) || number < Min || Max < number);
+        }
+
+        private void UIElement_OnLostFocus(object sender, RoutedEventArgs e)
+        {
+            if (IsNumber && sender is TextBox tb && (tb.Text == "-" || string.IsNullOrWhiteSpace(tb.Text)))
+            {
+                tb.Text = "0";
+            }
         }
     }
 }

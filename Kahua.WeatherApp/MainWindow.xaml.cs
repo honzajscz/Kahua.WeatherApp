@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 using Windows.Devices.Geolocation;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Kahua.WeatherApp.ViewModels;
 using SolidColorBrush = ABI.Microsoft.UI.Xaml.Media.SolidColorBrush;
 
 // To learn more about WinUI, the WinUI project structure,
@@ -26,12 +27,15 @@ namespace Kahua.WeatherApp
     /// </summary>
     public sealed partial class MainWindow : Window
     {
-        public MainWindow()
-        {
-            this.InitializeComponent();
-        }
+        public MainWindowVM ViewModel { get; }
 
-        public FrameworkElement RootElement => RootGrid;
+        public MainWindow(MainWindowVM viewModel)
+        {
+            
+            ViewModel = viewModel;
+            this.InitializeComponent();
+            RootGrid.DataContext = viewModel;
+        }
 
         public async Task<ContentDialogResult> ShowDialogAsync(string title, string message)
         {
@@ -43,31 +47,6 @@ namespace Kahua.WeatherApp
                 XamlRoot = RootGrid.XamlRoot
             };
             return await warningDialog.ShowAsync();
-        }
-
-        
-        public async Task<Geoposition> GetCurrentLocationAsync()
-        {
-            var accessStatus = await Geolocator.RequestAccessAsync();
-            switch (accessStatus)
-            {
-                case GeolocationAccessStatus.Allowed:
-                    var geolocator = new Geolocator { DesiredAccuracyInMeters = 50 };
-                    var position = await geolocator.GetGeopositionAsync();
-                    return position;
-                case GeolocationAccessStatus.Denied:
-                    throw new Exception("Location access denied.");
-                case GeolocationAccessStatus.Unspecified:
-                    throw new Exception("Unspecified error.");
-                default:
-                    throw new Exception("Unknown error.");
-            }
-        }
-
-        private async void ButtonBase_OnClick(object sender, RoutedEventArgs e)
-        {
-            var currentLocationAsync = await GetCurrentLocationAsync();
-            
         }
     }
 }

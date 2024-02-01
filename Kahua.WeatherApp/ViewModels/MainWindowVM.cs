@@ -1,216 +1,177 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
-using OpenWeather;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
+﻿using System;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Windows.Devices.Geolocation;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using UnitsNet.Units;
+using Kahua.WeatherApp.Services;
 using ApplicationException = System.ApplicationException;
 
-namespace Kahua.WeatherApp.ViewModels
+namespace Kahua.WeatherApp.ViewModels;
+
+public class MainWindowVM : ObservableObject
 {
-    public enum WeatherUnits
-    {
-        Celsius,
-        Fahrenheit
-    }
+    private readonly IWeatherService _weatherService;
+    private readonly IGeolocationService _geolocationService;
+    private string _dewPoint;
+    private bool _inProgress;
+    private bool _isCelsius;
+    private double _latitude;
+    private double _longitude;
+    private string _place;
+    private string _temperature;
+    private string _visibility;
+    private string _windSpeed;
 
-    public interface IWeatherService
+    public MainWindowVM(IWeatherService weatherService, IGeolocationService geolocationService)
     {
-        Task<WeatherData> GetWeatherDataAsync(double latitude, double longitude, WeatherUnits units);
-    }
-
-    class WeatherService : IWeatherService
-    {
-        public const int TimeOutSec = 10;
-
-        public async Task<WeatherData> GetWeatherDataAsync(double latitude, double longitude, WeatherUnits units)
+        _weatherService = weatherService;
+        _geolocationService = geolocationService;
+        GetCurrentLocationCommand = new AsyncRelayCommand(GetCurrentLocationAsync, () => !InProgress);
+        SearchWeatherCommand = new AsyncRelayCommand(SearchWeatherAsync, () => !InProgress);
+        IsCelsius = true;
+        PropertyChanged += async (sender, args) =>
         {
-            try
-            {
-                if (!StationDictionary.TryGetClosestStation(latitude, longitude, out var stationInfo))
-                {
-                    throw new ApplicationException("Weather station not found");
-                }
+            if (args.PropertyName == nameof(IsCelsius)) await SearchWeatherAsync();
+        };
+    }
 
-                var weather = await stationInfo.AsMetarStation().Update().WaitAsync(TimeSpan.FromSeconds(TimeOutSec));
-                if (weather == null)
-                    throw new ApplicationException($"No weather data in the station {stationInfo.ICAO}");
-
-
-                var weatherInUnits = weather.Value.ConvertTo(new Units(units == WeatherUnits.Celsius
-                        ? TemperatureUnit.DegreeCelsius
-                        : TemperatureUnit.DegreeFahrenheit,
-                    PressureUnit.Hectopascal, SpeedUnit.Knot, LengthUnit.Kilometer));
-
-                var region = string.IsNullOrWhiteSpace(stationInfo.Region) ? string.Empty : $"({stationInfo.Region})";
-                var location = new WeatherStationLocation(stationInfo.Country, stationInfo.Name + region);
-
-
-                return new WeatherData(weatherInUnits.Temperature, weatherInUnits.WindSpeed, weatherInUnits.Dewpoint,
-                    weatherInUnits.Pressure, location);
-            }
-            catch (Exception e)
-            {
-                throw new ApplicationException($"Failed getting weather data: '{e.Message}'");
-            }
+    public bool InProgress
+    {
+        get => _inProgress;
+        set
+        {
+            if (value == _inProgress) return;
+            _inProgress = value;
+            OnPropertyChanged();
         }
     }
 
-    public record WeatherData(
-        double Temperature,
-        double WindSpeed,
-        double DewPoint,
-        double Pressure,
-        WeatherStationLocation Location);
-
-    public record WeatherStationLocation(string Country, string Place);
-
-    class MainWindowVM : ObservableObject
+    public double Latitude
     {
-        private readonly IWeatherService _weatherService;
-        private bool _inProgress;
-        private double _latitude;
-        private double _longitude;
-        private string _pressure;
-        private string _windSpeed;
-        private string _dewPoint;
-        private string _temperature;
-        private string _place;
-        private bool _isCelsius;
-
-        public bool InProgress
+        get => _latitude;
+        set
         {
-            get => _inProgress;
-            set
-            {
-                if (value == _inProgress) return;
-                _inProgress = value;
-                OnPropertyChanged();
-            }
+            if (value.Equals(_latitude)) return;
+            _latitude = value;
+            OnPropertyChanged();
         }
+    }
 
-        public double Latitude
+    public double Longitude
+    {
+        get => _longitude;
+        set
         {
-            get => _latitude;
-            set
-            {
-                if (value.Equals(_latitude)) return;
-                _latitude = value;
-                OnPropertyChanged();
-            }
+            if (value.Equals(_longitude)) return;
+            _longitude = value;
+            OnPropertyChanged();
         }
+    }
 
-        public double Longitude
+    public string Visibility
+    {
+        get => _visibility;
+        set
         {
-            get => _longitude;
-            set
-            {
-                if (value.Equals(_longitude)) return;
-                _longitude = value;
-                OnPropertyChanged();
-            }
+            if (value.Equals(_visibility)) return;
+            _visibility = value;
+            OnPropertyChanged();
         }
+    }
 
-        public string Pressure
+    public string WindSpeed
+    {
+        get => _windSpeed;
+        set
         {
-            get => _pressure;
-            set
-            {
-                if (value.Equals(_pressure)) return;
-                _pressure = value;
-                OnPropertyChanged();
-            }
+            if (value == _windSpeed) return;
+            _windSpeed = value;
+            OnPropertyChanged();
         }
+    }
 
-        public string WindSpeed
+    public string DewPoint
+    {
+        get => _dewPoint;
+        set
         {
-            get => _windSpeed;
-            set
-            {
-                if (value == _windSpeed) return;
-                _windSpeed = value;
-                OnPropertyChanged();
-            }
+            if (value == _dewPoint) return;
+            _dewPoint = value;
+            OnPropertyChanged();
         }
+    }
 
-        public string DewPoint
+    public string Temperature
+    {
+        get => _temperature;
+        set
         {
-            get => _dewPoint;
-            set
-            {
-                if (value == _dewPoint) return;
-                _dewPoint = value;
-                OnPropertyChanged();
-            }
+            if (value == _temperature) return;
+            _temperature = value;
+            OnPropertyChanged();
         }
+    }
 
-        public string Temperature
+    public string Place
+    {
+        get => _place;
+        set
         {
-            get => _temperature;
-            set
-            {
-                if (value == _temperature) return;
-                _temperature = value;
-                OnPropertyChanged();
-            }
+            if (value == _place) return;
+            _place = value;
+            OnPropertyChanged();
         }
+    }
 
-        public string Place
+    public bool IsCelsius
+    {
+        get => _isCelsius;
+        set
         {
-            get => _place;
-            set
-            {
-                if (value == _place) return;
-                _place = value;
-                OnPropertyChanged();
-            }
+            if (value == _isCelsius) return;
+            _isCelsius = value;
+            IsCelsius = value;
+            OnPropertyChanged();
         }
+    }
 
-        public bool IsCelsius
+    public ICommand SearchWeatherCommand { get; init; }
+
+    public ICommand GetCurrentLocationCommand { get; set; }
+
+    private async Task SearchWeatherAsync()
+    {
+        InProgress = true;
+        try
         {
-            get => _isCelsius;
-            set
-            {
-                if (value == _isCelsius) return;
-                _isCelsius = value;
-                OnPropertyChanged();
-            }
+            var weatherDataAsync = await _weatherService.GetWeatherDataAsync(Latitude, Longitude,
+                IsCelsius ? WeatherUnits.Celsius : WeatherUnits.Fahrenheit);
+            var tempUnit = IsCelsius ? "°C" : "°F";
+            Temperature = $"{weatherDataAsync.Temperature:F1} {tempUnit}";
+            WindSpeed = $"{weatherDataAsync.WindSpeed:F1} kn";
+            DewPoint = $"{weatherDataAsync.DewPoint:F1} {tempUnit}";
+            Visibility = $"{weatherDataAsync.Visibility:F2} km";
+            Place = $"{weatherDataAsync.Location.Place}, {weatherDataAsync.Location.Country}";
         }
-
-        public ICommand Search { get; init; }
-
-
-        private async Task CancelableExecute(CancellationToken token)
+        finally
         {
-            InProgress = true;
-            try
-            {
-                var weatherDataAsync = await _weatherService.GetWeatherDataAsync(Latitude, Longitude,
-                    IsCelsius ? WeatherUnits.Celsius : WeatherUnits.Fahrenheit);
-                var tempUnit = IsCelsius ? "°C" : "°F";
-                Temperature = $"{weatherDataAsync.Temperature:F1} {tempUnit}";
-                WindSpeed = $"{weatherDataAsync.WindSpeed:F1} kn";
-                DewPoint = $"{weatherDataAsync.DewPoint:F1} {tempUnit}";
-                Pressure = $"{weatherDataAsync.Pressure:F1} hPa";
-                Place = weatherDataAsync.Location.Place;
-            }
-            finally
-            {
-                InProgress = false;
-            }
+            InProgress = false;
         }
+    }
 
-  
-        public MainWindowVM(IWeatherService weatherService)
+    public async Task GetCurrentLocationAsync()
+    {
+        InProgress = true;
+        try
         {
-            _weatherService = weatherService;
-            Search = new AsyncRelayCommand(CancelableExecute);
-            IsCelsius = true;
+            var location = await _geolocationService.GetCurrentLocationAsync();
+            Latitude = location.Latitude;
+            Longitude = location.Longitude;
+        }
+        finally
+        {
+            InProgress = false;
         }
     }
 }

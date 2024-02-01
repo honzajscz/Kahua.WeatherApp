@@ -1,0 +1,2 @@
+﻿    [*.xaml]
+    resharper_xml_attribute_formatting_style = on_different_lines

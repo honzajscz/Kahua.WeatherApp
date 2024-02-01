@@ -20,6 +20,7 @@ using Windows.Graphics;
 using Kahua.WeatherApp.ViewModels;
 using UnhandledExceptionEventArgs = Microsoft.UI.Xaml.UnhandledExceptionEventArgs;
 using System.Globalization;
+using Kahua.WeatherApp.Services;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -58,7 +59,10 @@ namespace Kahua.WeatherApp
         /// <param name="args">Details about the launch request and process.</param>
         protected override void OnLaunched(Microsoft.UI.Xaml.LaunchActivatedEventArgs args)
         {
-            var viewModel = new MainWindowVM(new WeatherService());
+            // poor man's DI
+            var weatherService = new WeatherService();
+            var myGeolocator = new GeolocationService();
+            var viewModel = new MainWindowVM(weatherService, myGeolocator);
             _window = new MainWindow(viewModel);
             _window.Activate();
             _window.AppWindow.Resize(new (650, 350));

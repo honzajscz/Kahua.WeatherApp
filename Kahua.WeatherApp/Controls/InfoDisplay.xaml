@@ -31,7 +31,7 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Text="{x:Bind Label}" Style="{StaticResource LabelStyle}" />
-        <TextBlock Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Text="{x:Bind Text}" Style="{StaticResource TextStyle}" />
+        <TextBlock Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Text="{x:Bind Text, Mode=OneWay }" Style="{StaticResource TextStyle}" />
     </Grid>
 
 </UserControl>
