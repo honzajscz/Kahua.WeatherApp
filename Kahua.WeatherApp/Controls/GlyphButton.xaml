@@ -16,7 +16,7 @@
                 <Setter Property="BorderThickness" Value="0" />
             </Style>
         </Grid.Resources>
-        <Button Style="{StaticResource ButtonStyle}" >
+        <Button Style="{StaticResource ButtonStyle}" Command="{x:Bind Command}" >
             <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="{x:Bind Glyph}" />
             <ToolTipService.ToolTip>
                 <ToolTip Content="{x:Bind ToolTip}" />

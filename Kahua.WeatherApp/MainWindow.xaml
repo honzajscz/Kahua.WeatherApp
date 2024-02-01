@@ -8,10 +8,13 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:controls="using:Kahua.WeatherApp.Controls"
+    xmlns:viewModels="using:Kahua.WeatherApp.ViewModels"
     Title="Kahua Weather App"
-    mc:Ignorable="d">
+    mc:Ignorable="d" 
+    d:DataContext="{d:DesignInstance Type=viewModels:MainWindowVM, IsDesignTimeCreatable=False}">
+    
 
-    <Grid RequestedTheme="Light" x:Name="Grid">
+    <Grid RequestedTheme="Light" x:Name="RootGrid">
         <Grid.Resources>
             <Thickness x:Key="MainMargin">20,10,20,10</Thickness>
         </Grid.Resources>
@@ -40,8 +43,8 @@
             <controls:LabeledTextBox Label="Lat: " Style="{StaticResource LabeledTextBoxStyle}" />
 
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                <controls:GlyphButton Glyph="&#xE707;" ToolTip="Use current location"/>
-                <controls:GlyphButton Glyph="&#xE721;" ToolTip="Get weather"/>
+                <controls:GlyphButton Glyph="&#xE707;" ToolTip="Use current location" />
+                <controls:GlyphButton Glyph="&#xE721;" ToolTip="Find weather" Command="{Binding Search}"/>
             </StackPanel>
             <ProgressBar HorizontalAlignment="Stretch" IsIndeterminate="True" Visibility="Visible" Opacity="1" />
         </StackPanel>
@@ -58,10 +61,10 @@
                         <Setter Property="MinWidth" Value="0" />
                     </Style>
                 </StackPanel.Resources>
-                <ToggleSwitch OffContent="Dark" OnContent="Light" IsOn="True" Style="{StaticResource ToggleSwitchStyle}" />
-                <ToggleSwitch OffContent="F°" OnContent="C°" IsOn="True" Style="{StaticResource ToggleSwitchStyle}" />
+                <ToggleSwitch OffContent="Dark" OnContent="Light" IsOn="True"   Style="{StaticResource ToggleSwitchStyle}" />
+                <ToggleSwitch OffContent="°F" OnContent="°C" IsOn="{Binding IsCelsius }" Style="{StaticResource ToggleSwitchStyle}" />
             </StackPanel>
-            <controls:InfoDisplay Label="Place:" VerticalAlignment="Stretch" />
+            <controls:InfoDisplay Label="Place:" VerticalAlignment="Stretch" Text="{Binding Place}" />
         </StackPanel>
 
         <Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
@@ -72,10 +75,10 @@
                 <ColumnDefinition Width="1*" />
                 <ColumnDefinition Width="1*" />
             </Grid.ColumnDefinitions>
-            <controls:InfoDisplay Label="Pressure:" Grid.Column="0" />
-            <controls:InfoDisplay Label="Wind:" Grid.Column="1" />
-            <controls:InfoDisplay Label="Dew Point:"  Grid.Column="2" />
-            <controls:InfoDisplay Label="Temperature:" Grid.Column="3" />
+            <controls:InfoDisplay Label="Pressure:" Text="{Binding Pressure}" Grid.Column="0" />
+            <controls:InfoDisplay Label="Wind:" Grid.Column="1" Text="{Binding WindSpeed}"/>
+            <controls:InfoDisplay Label="Dew Point:"  Grid.Column="2" Text="{Binding DewPoint}"/>
+            <controls:InfoDisplay Label="Temperature:" Grid.Column="3" Text="{Binding Temperature}"/>
         </Grid>
     </Grid>
 </Window>

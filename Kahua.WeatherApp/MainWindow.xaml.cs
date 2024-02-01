@@ -29,8 +29,9 @@ namespace Kahua.WeatherApp
         public MainWindow()
         {
             this.InitializeComponent();
-            
         }
+
+        public FrameworkElement RootElement => RootGrid;
 
         public async Task<ContentDialogResult> ShowDialogAsync(string title, string message)
         {
@@ -39,7 +40,7 @@ namespace Kahua.WeatherApp
                 Title = title,
                 Content = message,
                 CloseButtonText = "Ok",
-                XamlRoot = Grid.XamlRoot
+                XamlRoot = RootGrid.XamlRoot
             };
             return await warningDialog.ShowAsync();
         }

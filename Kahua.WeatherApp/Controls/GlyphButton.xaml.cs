@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Windows.Input;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Microsoft.UI.Xaml;
@@ -37,6 +38,15 @@ namespace Kahua.WeatherApp.Controls
         {
             get { return (string)GetValue(ToolTipProperty); }
             set { SetValue(ToolTipProperty, value); }
+        }
+
+        public static readonly DependencyProperty CommandProperty = DependencyProperty.Register(
+            nameof(Command), typeof(ICommand), typeof(GlyphButton), new PropertyMetadata(default(ICommand)));
+
+        public ICommand Command
+        {
+            get { return (ICommand)GetValue(CommandProperty); }
+            set { SetValue(CommandProperty, value); }
         }
         public GlyphButton()
         {
