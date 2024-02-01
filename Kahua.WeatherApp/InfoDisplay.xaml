@@ -18,8 +18,8 @@
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-       <TextBlock Grid.Row="0" Grid.Column="0" Text="Temperature:" Grid.ColumnSpan="2" FontSize="15"></TextBlock>
-        <TextBlock Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Text="50 C" FontSize="30"></TextBlock>
+        <TextBlock Grid.Row="0" Grid.Column="0" Text="Temperature:" Grid.ColumnSpan="2" FontSize="15" FontWeight="SemiBold" HorizontalAlignment="Center"/>
+        <TextBlock Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Text="New Jersey" FontSize="25" HorizontalAlignment="Center" TextWrapping="Wrap"/>
     </Grid>
 
 </UserControl>

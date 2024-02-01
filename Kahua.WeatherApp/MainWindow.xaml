@@ -13,6 +13,7 @@
     <Grid RequestedTheme="Light" x:Name="Grid">
         <Grid.Resources>
 
+            <Thickness x:Key="LocationMargin">20,10,20,10</Thickness>
         </Grid.Resources>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="5*" />
@@ -26,26 +27,23 @@
         <Border Grid.Row="0" Grid.Column="0" Background="LightBlue" />
         <Border Grid.Row="0" Grid.Column="1" Background="LightSkyBlue" />
         <Border Grid.Row="1" Grid.ColumnSpan="2" Grid.Column="0" Background="DeepSkyBlue" />
-        <StackPanel Width="300" VerticalAlignment="Center">
+        <StackPanel VerticalAlignment="Center">
             <StackPanel.Resources>
-                <Thickness x:Key="Margin">0,10,0,0</Thickness>
                 <Style x:Key="LabeledTextBoxStyle" TargetType="local:LabeledTextBox">
-                    <Setter Property="Margin" Value="{StaticResource Margin}" />
-                    <Setter Property="HorizontalAlignment" Value="Left" />
-                    <Setter Property="Width" Value="300" />
+                    <Setter Property="Margin" Value="{StaticResource LocationMargin}" />
+                    <Setter Property="HorizontalAlignment" Value="Stretch" />
                 </Style>
                 <Style x:Key="ButtonStyle" TargetType="Button">
                     <Setter Property="HorizontalAlignment" Value="Right" />
                     <Setter Property="Background" Value="Transparent" />
                     <Setter Property="BorderThickness" Value="0" />
-                    <Setter Property="Margin" Value="{StaticResource Margin}" />
                 </Style>
             </StackPanel.Resources>
             <local:LabeledTextBox Label="Long:" Style="{StaticResource LabeledTextBoxStyle}" />
             <local:LabeledTextBox Label="Lat: " Style="{StaticResource LabeledTextBoxStyle}" />
-      
+
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-               
+
                 <Button Style="{StaticResource ButtonStyle}" Click="ButtonBase_OnClick">
                     <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE707;" />
                     <ToolTipService.ToolTip>
@@ -56,24 +54,35 @@
                     <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE721;" />
                 </Button>
             </StackPanel>
-            <ProgressBar HorizontalAlignment="Stretch" IsIndeterminate="True" Visibility="Visible" Opacity="0" />
+            <ProgressBar HorizontalAlignment="Stretch" IsIndeterminate="True" Visibility="Visible" Opacity="1" />
         </StackPanel>
 
-        <StackPanel Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center">
-            <local:InfoDisplay></local:InfoDisplay>
+        <StackPanel Grid.Row="0" Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Stretch" Margin="{StaticResource LocationMargin}">
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Right">
+                <StackPanel.Resources>
+                    <Style x:Key="ToggleSwitchStyle" TargetType="ToggleSwitch"   BasedOn="{StaticResource DefaultToggleSwitchStyle}">
+                        <Setter Property="HorizontalAlignment" Value="Right" />
+                        <Setter Property="Margin" Value="10,0,0,0" />
+                        <Setter Property="MinWidth" Value="0" />
+                    </Style>
+                </StackPanel.Resources>
+                <ToggleSwitch OffContent="Dark" OnContent="Light" IsOn="True" Style="{StaticResource ToggleSwitchStyle}" />
+                <ToggleSwitch OffContent="F" OnContent="C" IsOn="True" Style="{StaticResource ToggleSwitchStyle}" />
+            </StackPanel>
+            <local:InfoDisplay VerticalAlignment="Stretch" />
         </StackPanel>
-        <Grid Grid.Row="1" Grid.ColumnSpan="2" Grid.Column="0"
-               HorizontalAlignment="Stretch" VerticalAlignment="Center">
+        <Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
+              Margin="{StaticResource LocationMargin}" HorizontalAlignment="Stretch" VerticalAlignment="Center">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="1*"/>
-                <ColumnDefinition Width="1*"/>
-                <ColumnDefinition Width="1*"/>
-                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="1*" />
             </Grid.ColumnDefinitions>
-            <local:InfoDisplay Grid.Column="0" Margin="20"></local:InfoDisplay>
-            <local:InfoDisplay Grid.Column="1" Margin="20"></local:InfoDisplay>
-            <local:InfoDisplay Grid.Column="2" Margin="20"></local:InfoDisplay>
-            <local:InfoDisplay Grid.Column="3" Margin="20"></local:InfoDisplay>
+            <local:InfoDisplay Grid.Column="0" />
+            <local:InfoDisplay Grid.Column="1" />
+            <local:InfoDisplay Grid.Column="2" />
+            <local:InfoDisplay Grid.Column="3" />
 
         </Grid>
     </Grid>
