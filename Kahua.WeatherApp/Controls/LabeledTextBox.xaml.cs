@@ -1,3 +1,4 @@
+using System.Globalization;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 
@@ -16,9 +17,29 @@ namespace Kahua.WeatherApp.Controls
             get { return (string)GetValue(LabelProperty); }
             set { SetValue(LabelProperty, value); }
         }
+
+        public static readonly DependencyProperty TextProperty = DependencyProperty.Register(
+            nameof(Text), typeof(string), typeof(LabeledTextBox), new PropertyMetadata(default(string)));
+
+        public string Text
+        {
+            get { return (string)GetValue(TextProperty); }
+            set { SetValue(TextProperty, value); }
+        }
+
+        public double? Min { get; set; }
+        public double? Max { get; set; }
+        public bool IsNumber { get; set; }
+
         public LabeledTextBox()
         {
             this.InitializeComponent();
+        }
+
+
+        private void TextBox_OnBeforeTextChanging(TextBox sender, TextBoxBeforeTextChangingEventArgs args)
+        {
+            args.Cancel = IsNumber && !string.IsNullOrWhiteSpace(args.NewText) && (!double.TryParse(args.NewText, out var number ) || number < Min || Max < number);
         }
     }
 }
