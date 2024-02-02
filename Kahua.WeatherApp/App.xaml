@@ -14,25 +14,14 @@
 
             <ResourceDictionary.ThemeDictionaries>
                 <ResourceDictionary x:Key="Dark">
-                    <Style x:Key="TextBlockStyle" TargetType="TextBlock">
-                        <Setter Property="FontSize" Value="25" />
-                        <Setter Property="Foreground" Value="White" />
-                    </Style>
                     <SolidColorBrush x:Key="LighterBrush" Color="#7077A1" />
                     <SolidColorBrush x:Key="LightBrush" Color="#424769" />
-                    <SolidColorBrush x:Key="DarkererBrush" Color="#363062" />
+                    <SolidColorBrush x:Key="DarkerBrush" Color="#363062" />
                 </ResourceDictionary>
                 <ResourceDictionary x:Key="Light">
-                    <Style x:Key="TextBlockStyle" TargetType="TextBlock">
-                        <Setter Property="FontSize" Value="25" />
-                        <Setter Property="Foreground" Value="Black" />
-                    </Style>
                     <SolidColorBrush x:Key="LighterBrush" Color="#FBF9F1" />
                     <SolidColorBrush x:Key="LightBrush" Color="#AAD7D9" />
-                    <SolidColorBrush x:Key="DarkererBrush" Color="#92C7CF" />
-                </ResourceDictionary>
-                <ResourceDictionary x:Key="HighContrast">
-                    <SolidColorBrush x:Key="MyBrush" Color="Yellow" />
+                    <SolidColorBrush x:Key="DarkerBrush" Color="#92C7CF" />
                 </ResourceDictionary>
             </ResourceDictionary.ThemeDictionaries>
         </ResourceDictionary>

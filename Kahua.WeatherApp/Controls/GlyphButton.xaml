@@ -15,9 +15,12 @@
                 <Setter Property="Background" Value="Transparent" />
                 <Setter Property="BorderThickness" Value="0" />
             </Style>
+            <Style x:Key="FontIconStyle" TargetType="FontIcon">
+                <Setter Property="FontFamily" Value="Segoe MDL2 Assets" />
+            </Style>
         </Grid.Resources>
         <Button Style="{StaticResource ButtonStyle}" Command="{x:Bind Command}">
-            <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="{x:Bind Glyph}" />
+            <FontIcon Glyph="{x:Bind Glyph}" Style="{StaticResource FontIconStyle}" />
             <ToolTipService.ToolTip>
                 <ToolTip Content="{x:Bind ToolTip}" />
             </ToolTipService.ToolTip>

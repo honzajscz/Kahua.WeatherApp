@@ -30,7 +30,7 @@
 
         <Border Grid.Row="0" Grid.Column="0" Background="{ThemeResource LighterBrush}" />
         <Border Grid.Row="0" Grid.Column="1" Background="{ThemeResource LightBrush}" />
-        <Border Grid.Row="1" Grid.ColumnSpan="2" Grid.Column="0" Background="{ThemeResource DarkererBrush}" />
+        <Border Grid.Row="1" Grid.ColumnSpan="2" Grid.Column="0" Background="{ThemeResource DarkerBrush}" />
 
         <StackPanel Grid.Row="0" Grid.Column="0" VerticalAlignment="Center">
             <StackPanel.Resources>
